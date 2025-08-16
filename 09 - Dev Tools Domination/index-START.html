@@ -19,28 +19,70 @@
     }
 
     // Regular
+    console.log("Regular");
+
 
     // Interpolated
+    const text = "custom";
+    console.log("This is an %s interpolated string on console", text);
+    //this works similar to how one would use printf in C
 
     // Styled
+    console.log("%c this is styled text", "font-size:20px");
 
     // warning!
+    console.warn("This is a warning");
 
     // Error :|
+    console.error("This is an error");
 
     // Info
+    console.info("This is informative text");
 
     // Testing
+    console.assert( 1 == 2, "This will execute if things are wrong");
+    console.assert( 1 <= 2, "This will execute if things are correct");
 
     // clearing
+    console.clear("Can i write something here?");
+    //doesn't matter if i write something in the parentheses, it won't be logged
 
     // Viewing DOM Elements
+    console.log(document.querySelector("p")); //this logs the outerHTML of the returned/provided dom node
+    console.dir(document.querySelector("p")); //this logs the dom element with all its information and meta tags
 
     // Grouping together
+    dogs.forEach(dog=>{
+      console.groupCollapsed(dog.name);
+      console.log("The name of the dog is : " + dog.name);
+      console.log(`${dog.name} is ${dog.age} years old.`);
+      console.groupEnd("Does adding text here do anything?");   //it doesnt
+    })
 
     // counting
+    console.count("a");
+    console.count("a");
+    console.count("a");
+    console.count("ab");
+    console.count("ab");
+    console.count("ac");
+    console.count("ac");
+    console.count("ac");
+    console.count("ab");
+    console.count("a");
+    console.count("ac");
+
 
     // timing
+    console.time("Fetch");    //this is the identifier for each specific console.time, not to be confused with message. It does get displayed alongside time
+    fetch("https://randomuser.me/api/")
+      .then(responseObject => responseObject.json())
+      .then(dataRecieved => {
+        console.timeEnd("Fetch");
+        console.log(dataRecieved);
+      });
+
+      console.table(dogs);
 
   </script>
 </body>
