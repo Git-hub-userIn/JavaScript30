@@ -7,6 +7,20 @@
     <link rel="icon" href="https://fav.farm/🔥" />
   </head>
   <body>
-    <script></script>
+    <script>
+      const keysPressed = [];
+      const secretCode = "secret";
+      window.addEventListener("keydown",(e)=>{
+        keysPressed.push(e.key);
+        console.log(keysPressed);
+        keysPressed.splice(-(secretCode.length - 1), (keysPressed.length - secretCode.length));
+
+        if(keysPressed.join("").includes(secretCode)){
+          console.log("BINGO!!");
+          cornify_add();
+        }
+      })
+
+    </script>
   </body>
 </html>
