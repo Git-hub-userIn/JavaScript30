@@ -1,23 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Type Ahead 👀</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="https://fav.farm/🔥" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Type Ahead 👀</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <form class="search-form">
+      <input type="text" class="search" placeholder="City or State" />
+      <ul class="suggestions">
+        <li>Filter for a city</li>
+        <li>or a state</li>
+      </ul>
+    </form>
+    <script>
+      const endpoint = "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
+      const result = [];
+      const inputField = document.querySelector('input');
+      const suggestions = document.querySelector(".suggestions");
 
-  <form class="search-form">
-    <input type="text" class="search" placeholder="City or State">
-    <ul class="suggestions">
-      <li>Filter for a city</li>
-      <li>or a state</li>
-    </ul>
-  </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+      fetch(endpoint)
+        .then((response)=>response.json())
+        .then(data => result.push(... data));
+      
 
-</script>
-</body>
+      function findMatches(wordToMatch, allWords){
+        return allWords.filter(element => {
+          const regex = new RegExp(wordToMatch, 'gi');
+          return element.city.match(regex) || element.state.match(regex);
+        })
+      }
+       
+        
+      function updateScreen(){
+        const matches = findMatches(this.value, result);
+        const html = matches.map(location => {
+          return`
+          <li>
+            <span class = "name">${location.city}, ${location.state}</span>
+            <span class = "population">${location.population}</span>
+          </li>
+          `;
+        }).join("");
+        suggestions.innerHTML = html;
+      }
+
+      inputField.addEventListener('change',updateScreen);
+      inputField.addEventListener('keyup',updateScreen);
+
+
+    </script>
+  </body>
 </html>
