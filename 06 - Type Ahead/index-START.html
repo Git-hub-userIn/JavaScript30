@@ -15,41 +15,54 @@
       </ul>
     </form>
     <script>
-      const endpoint = "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
+      const endpoint =
+        "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
+
       const result = [];
-      const inputField = document.querySelector('input');
+      const inputField = document.querySelector("input");
       const suggestions = document.querySelector(".suggestions");
 
       fetch(endpoint)
-        .then((response)=>response.json())
-        .then(data => result.push(... data));
-      
+        .then((response) => response.json())
+        .then((data) => result.push(...data));
 
-      function findMatches(wordToMatch, allWords){
-        return allWords.filter(element => {
-          const regex = new RegExp(wordToMatch, 'gi');
+      function findMatches(wordToMatch, allWords) {
+        return allWords.filter((element) => {
+          const regex = new RegExp(wordToMatch, "gi");
           return element.city.match(regex) || element.state.match(regex);
-        })
+        });
       }
-       
-        
-      function updateScreen(){
+
+      function numberWithCommas(x) {        //look this up later
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+      function updateScreen() {
         const matches = findMatches(this.value, result);
-        const html = matches.map(location => {
-          return`
-          <li>
-            <span class = "name">${location.city}, ${location.state}</span>
-            <span class = "population">${location.population}</span>
-          </li>
-          `;
-        }).join("");
+        const html = matches
+          .map((location) => {
+            const regex = new RegExp(this.value, "gi");
+            const cityName = location.city.replace(
+              regex,
+              `<span class="hl">${this.value}</span>`
+            );
+            const stateName = location.state.replace(
+              regex,
+              `<span class="hl">${this.value}</span>`
+            );
+            return `
+              <li>
+                <span class="name">${cityName}, ${stateName}</span>
+                <span class="population">${numberWithCommas(location.population)}</span>
+              </li>
+            `;
+          })
+          .join("");
         suggestions.innerHTML = html;
       }
 
-      inputField.addEventListener('change',updateScreen);
-      inputField.addEventListener('keyup',updateScreen);
-
-
+      inputField.addEventListener("change", updateScreen);
+      inputField.addEventListener("keyup", updateScreen);
     </script>
   </body>
 </html>
